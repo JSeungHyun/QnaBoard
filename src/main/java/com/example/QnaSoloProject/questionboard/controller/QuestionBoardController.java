@@ -1,12 +1,11 @@
 package com.example.QnaSoloProject.questionboard.controller;
 
 
-import com.example.QnaSoloProject.member.entity.Member;
-import com.example.QnaSoloProject.questionboard.dto.QuestionPostDto;
+import com.example.QnaSoloProject.questionboard.dto.QuestionBoardPatchDto;
+import com.example.QnaSoloProject.questionboard.dto.QuestionBoardPostDto;
 import com.example.QnaSoloProject.questionboard.entity.QuestionBoard;
 import com.example.QnaSoloProject.questionboard.mapper.QuestionMapper;
 import com.example.QnaSoloProject.questionboard.service.QuestionBoardService;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -28,9 +27,18 @@ public class QuestionBoardController {
     }
 
     @PostMapping
-    public ResponseEntity postQuestion(@Valid @RequestBody QuestionPostDto questionPostDto){
-        QuestionBoard questionBoard = mapper.questionPostDtoToQuestionBoard(questionPostDto);
+    public ResponseEntity postQuestion(@Valid @RequestBody QuestionBoardPostDto questionBoardPostDto){
+        QuestionBoard questionBoard = mapper.questionPostDtoToQuestionBoard(questionBoardPostDto);
         questionService.createPost(questionBoard);
+        return new ResponseEntity(mapper.questionBoardToQuestionResponseDto(questionBoard), HttpStatus.OK);
+    }
+
+    @PatchMapping("/{board-id}")
+    public ResponseEntity patchQuestion(@PathVariable("board-id") long boardId,
+                                        @Valid @RequestBody QuestionBoardPatchDto questionBoardPatchDto){
+        QuestionBoard questionBoard = mapper.questionPatchDtoToQuestionBoard(questionBoardPatchDto);
+        questionBoard.setQuestionBoardId(boardId);
+        questionService.updatePost(questionBoard);
         return new ResponseEntity(mapper.questionBoardToQuestionResponseDto(questionBoard), HttpStatus.OK);
     }
 }

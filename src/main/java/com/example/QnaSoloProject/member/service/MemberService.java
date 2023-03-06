@@ -46,7 +46,7 @@ public class MemberService {
 
     public Member findVerifiedMember(long memberId){
         Optional<Member> optionalMember = memberRepository.findById(memberId);
-        Member findMember = optionalMember.orElseThrow(() -> new RuntimeException());
+        Member findMember = optionalMember.orElseThrow(() -> new IllegalArgumentException());
 
         return findMember;
     }

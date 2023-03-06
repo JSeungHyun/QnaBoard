@@ -2,20 +2,23 @@ package com.example.QnaSoloProject.questionboard.entity;
 
 import com.example.QnaSoloProject.audit.Auditable;
 import com.example.QnaSoloProject.member.entity.Member;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.*;
 
 @NoArgsConstructor
-@Getter @Setter
+@Getter
+@Setter
 @Entity
 public class QuestionBoard extends Auditable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long questionBoardId;
+    private Long questionBoardId;
 
     @Column(nullable = false)
     private String title;
@@ -32,8 +35,9 @@ public class QuestionBoard extends Auditable {
     private BoardDisclosure disclosure = BoardDisclosure.PUBLIC;
 
     @ManyToOne
-    @JoinColumn(name = "MEMBER_ID")
+    @JoinColumn(name="MEMBER_ID")
     private Member member;
+
 
     public enum BoardStatus{
         QUESTION_REGISTRATION("질문 등록"),

@@ -1,6 +1,7 @@
 package com.example.QnaSoloProject.member.entity;
 
 import com.example.QnaSoloProject.questionboard.entity.QuestionBoard;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -16,9 +17,9 @@ public class Member {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long memberId;
+    private Long memberId;
 
-    @Column(nullable = false)
+    @Column(length = 50, nullable = false)
     private String name;
 
     @Column(nullable = false, unique = true)
@@ -32,7 +33,18 @@ public class Member {
     private MemberStatus memberStatus = MemberStatus.MEMBER_ACTIVE;
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.PERSIST)
-    private List<QuestionBoard> questions = new ArrayList<>();
+    private List<QuestionBoard> questionBoards = new ArrayList<>();
+
+    public Member(String name, String email, String password) {
+        this.name = name;
+        this.email = email;
+        this.password = password;
+    }
+
+    public Member(long memberId, String name) {
+        this.memberId = memberId;
+        this.name = name;
+    }
 
     public enum MemberStatus {
         MEMBER_ACTIVE("활동중"),
