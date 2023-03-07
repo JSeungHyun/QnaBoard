@@ -19,9 +19,4 @@ public class QuestionBoardPostDto {
     @NotBlank(message = "내용을 입력하세요.")
     private String content;
 
-    public Member getMember(){
-        Member member = new Member();
-        member.setMemberId(memberId);
-        return member;
-    }
 }

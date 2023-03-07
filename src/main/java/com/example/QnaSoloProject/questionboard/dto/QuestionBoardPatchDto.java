@@ -14,11 +14,6 @@ public class QuestionBoardPatchDto {
     private String title;
     private String content;
     private QuestionBoard.BoardStatus boardStatus;
-    private QuestionBoard.BoardDisclosure boardDisclosure;
+    private QuestionBoard.BoardDisclosure disclosure;
 
-    public Member getMember(){
-        Member member = new Member();
-        member.setMemberId(memberId);
-        return member;
-    }
 }

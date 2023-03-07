@@ -38,7 +38,7 @@ public class QuestionBoardController {
                                         @Valid @RequestBody QuestionBoardPatchDto questionBoardPatchDto){
         QuestionBoard questionBoard = mapper.questionPatchDtoToQuestionBoard(questionBoardPatchDto);
         questionBoard.setQuestionBoardId(boardId);
-        questionService.updatePost(questionBoard);
-        return new ResponseEntity(mapper.questionBoardToQuestionResponseDto(questionBoard), HttpStatus.OK);
+        QuestionBoard updatePost = questionService.updatePost(questionBoard);
+        return new ResponseEntity(mapper.questionBoardToQuestionResponseDto(updatePost), HttpStatus.OK);
     }
 }

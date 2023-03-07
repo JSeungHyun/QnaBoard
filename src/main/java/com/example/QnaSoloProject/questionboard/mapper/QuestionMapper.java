@@ -10,7 +10,11 @@ import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring")
 public interface QuestionMapper {
+
+    @Mapping(source = "memberId", target = "member.memberId")
     QuestionBoard questionPostDtoToQuestionBoard(QuestionBoardPostDto questionBoardPostDto);
+
+    @Mapping(source = "memberId", target = "member.memberId")
     QuestionBoard questionPatchDtoToQuestionBoard(QuestionBoardPatchDto questionBoardPatchDto);
 
     @Mapping(source = "member.name",target = "name")

@@ -22,15 +22,17 @@ public class QuestionBoardService {
     }
 
     public QuestionBoard createPost(QuestionBoard questionBoard){
-        questionBoard.setMember(memberService.findVerifiedMember(questionBoard.getMember().getMemberId()));
+        Member member = memberService.findVerifiedMember(questionBoard.getMember().getMemberId());
+        questionBoard.getMember().setName(member.getName());
         questionBoardRepository.save(questionBoard);
         return questionBoard;
     }
 
     public QuestionBoard updatePost(QuestionBoard questionBoard){
-        QuestionBoard findPost = findVerifiedQuestionBoard(questionBoard.getQuestionBoardId());
+        Member member = memberService.findVerifiedMember(questionBoard.getMember().getMemberId()); //요청한 사람
+        QuestionBoard findPost = findVerifiedQuestionBoard(questionBoard.getQuestionBoardId()); // 게시물
         // 관리자나 작성자가 아닌 경우
-        if (!(questionBoard.getMember().getEmail().equals(admin.INSTANCE.getEmail()) && !(findPost.getMember().getMemberId().equals(questionBoard.getMember().getMemberId())))){
+        if (!((member.getEmail().equals(admin.INSTANCE.getEmail())) || (member.getMemberId().equals(findPost.getMember().getMemberId())))){
             throw new RuntimeException(); // 권한 없음
         }
         // 이미 작업 완료된 게시글
@@ -38,13 +40,17 @@ public class QuestionBoardService {
             throw new RuntimeException();
         }
         // QUESTION_ANSWERED로의 변경은 관리자만 가능
-         if (questionBoard.getBoardStatus().equals(QuestionBoard.BoardStatus.QUESTION_ANSWERED)){
-             if (questionBoard.getMember().getEmail().equals(admin.INSTANCE.getEmail())){
-                findPost.setBoardStatus(QuestionBoard.BoardStatus.QUESTION_ANSWERED);
-             }else{
-                 throw new RuntimeException(); // 권한 없음
+         if (questionBoard.getBoardStatus() != null ) {
+             if (questionBoard.getBoardStatus().equals(QuestionBoard.BoardStatus.QUESTION_ANSWERED)) {
+                 if (member.getEmail().equals(admin.INSTANCE.getEmail())) {
+                     findPost.setBoardStatus(QuestionBoard.BoardStatus.QUESTION_ANSWERED);
+                 } else {
+                     throw new RuntimeException(); // 권한 없음
+                 }
              }
-
+             else {
+                 findPost.setBoardStatus(questionBoard.getBoardStatus());
+             }
          }
          Optional.ofNullable(questionBoard.getDisclosure()).ifPresent(status -> findPost.setDisclosure(status));
          Optional.ofNullable(questionBoard.getTitle()).ifPresent(title -> findPost.setTitle(title));
